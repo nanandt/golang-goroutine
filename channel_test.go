@@ -42,4 +42,24 @@ func TestChannelAsParameter(t *testing.T) {
 	time.Sleep(5 *time.Second)
 }
 
+func OnlyIn(channel chan<- string){ // hanya boleh mengirim data ke channel
+	time.Sleep(2 *time.Second)
+	channel <- "Bakul Sega"
+}
+
+func OnlyOut(channel <-chan string){ // hanya boleh mengambil data dari channel
+	data := <-channel
+	fmt.Println(data)
+}
+
+func TestInOutChannel(t *testing.T) {
+	channel := make(chan string)
+	defer close(channel)
+
+	go OnlyIn(channel)
+	go OnlyOut(channel)
+
+	time.Sleep(3 *time.Second)
+
+}
 
