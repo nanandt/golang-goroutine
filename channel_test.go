@@ -28,7 +28,6 @@ func TestCreateChannel(t *testing.T) {
 func GiveMeResponse(channel chan string){
 	time.Sleep(2 *time.Second)
 	channel <- "Harun Bakul Gas"
-	fmt.Println("Selesai mengirim data ke channel")
 }
 
 func TestChannelAsParameter(t *testing.T) {
@@ -100,5 +99,35 @@ func TestRangeChannel(t *testing.T) {
 	}
 
 	fmt.Println("Done")
+	// range channel digunakan ketika kita tdk tau brp data yg akan di terima oleh channel
 }
+
+func TestSelectChannel(t *testing.T) {
+	channel1 := make(chan string)
+	channel2 := make(chan string)
+
+	defer close(channel1)
+	defer close(channel2)
+
+	go GiveMeResponse(channel1)
+	go GiveMeResponse(channel2)
+
+	counter := 0
+
+	for {
+		select {
+		case data := <-channel1:
+			fmt.Println("Data dari channel 1", data)
+			counter++
+		case data := <-channel2:
+			fmt.Println("Data dari sannel 2", data)
+			counter++
+		}
+
+		if counter == 2{
+			break
+		}
+	}
+}
+
 
