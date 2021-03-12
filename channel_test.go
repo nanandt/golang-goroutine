@@ -22,7 +22,24 @@ func TestCreateChannel(t *testing.T) {
 	data := <-channel //mengambil data dari channel
 	fmt.Println(data)
 	time.Sleep(5 *time.Second)
-
-
 }
+
+func GiveMeResponse(channel chan string){
+	time.Sleep(2 *time.Second)
+	channel <- "Harun Bakul Gas"
+	fmt.Println("Selesai mengirim data ke channel")
+}
+
+func TestChannelAsParameter(t *testing.T) {
+	channel := make(chan string)
+	defer close(channel)
+
+	go GiveMeResponse(channel)
+
+	data := <-channel
+	fmt.Println(data)
+
+	time.Sleep(5 *time.Second)
+}
+
 
